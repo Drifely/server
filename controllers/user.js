@@ -39,22 +39,7 @@ class userController {
   }
   
   static vision (req, res) {
-          // Imports the Google Cloud client libraries
-      const vision = require('@google-cloud/vision');
-
-      const client = new vision.ImageAnnotatorClient({
-       projectId: process.env.PROJECT_ID,
-       keyFilename: process.env.KEYFILE_PATH
-      });
-      client
-       .textDetection(`gs://${process.env.BUCKET_NAME}/images/${req.file.cloudStorageObject}`)
-         .then(result => {
-           console.log(result);
-           return result
-         })
-         .catch(err => {
-           return err
-         })
+    res.send({...req.body})
   }
 
 }
