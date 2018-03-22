@@ -39,7 +39,11 @@ class userController {
   }
   
   static vision (req, res) {
-    res.send({...req.body})
+    userModel.findOneOrCreate(
+      {simNum: req.body.vision.simNum}, 
+      {...req.body.vision}, (err, data) => {
+        res.send(data)
+      })
   }
 
 }
