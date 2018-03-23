@@ -74,7 +74,7 @@ class userController {
         if (data) {
           res.send({exist: true, ...data})
         } else {
-          res.send({exist: false, ...req.body.vision})
+          res.send({exist: false, ...req.body.vision, raw: req.body.rawvision})
         }
       })
       .catch(err => console.log(error))
