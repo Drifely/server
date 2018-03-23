@@ -20,8 +20,8 @@ module.exports = function (req,res,next) {
           }
           else if (each === 'PRIA' || each === 'WANITA') req.body.vision.gender = each;
           else if (each.slice(0,7) === 'No. SÍM' || each.slice(0,7) === 'No. SIM') req.body.vision.simNum = each.slice(-12)
-          else if (each.slice(0,9) === 'Tempat &:') req.body.vision.pob = each.slice(9)
-          else if (each.slice(0,9) === 'TglLahir:') req.body.vision.dob = each.slice(9)
+          else if (each.slice(0,8) === 'Tempat &' || each.slice(0,8) === 'Tempat& ') req.body.vision.pob = each.slice(9).trim()
+          else if (each.slice(0,9) === 'TglLahir:' || each.slice(0,9) === 'Tgl.Lahir') req.body.vision.dob = each.slice(9).trim()
           else if (each.slice(0,7) === 'Alamat:') req.body.vision.address = each.slice(8)
         })
         next() 

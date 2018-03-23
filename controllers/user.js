@@ -1,7 +1,14 @@
 const userModel = require('../model/user')
+const jwt = require('jsonwebtoken')
+
 require('dotenv').config()
 
 class userController {
+
+  static print (req, res) {
+    res.send(req.body)
+  }
+  
   static findAll (req, res) {
     userModel.find({})
       .then(data => res.send(data))
@@ -28,7 +35,10 @@ class userController {
     userModel.findOneOrCreate(
       {simNum: req.body.simNum}, 
       {...req.body}, (err, data) => {
-        res.send(data)
+        jwt.sign(data._doc, process.env.SECRET_KEY, (err, jwt) => {
+          console.log(err)
+          res.send({...data._doc, jwt})
+        })
       })
   }
 
@@ -39,11 +49,15 @@ class userController {
   }
   
   static vision (req, res) {
-    userModel.findOneOrCreate(
-      {simNum: req.body.vision.simNum}, 
-      {...req.body.vision}, (err, data) => {
-        res.send(data)
-      })
+    res.send(req.body)
+    // userModel.findOneOrCreate(
+    //   {simNum: req.body.vision.simNum}, 
+    //   {...req.body.vision}, (err, data) => {
+    //      jwt.sign(data._doc, process.env.SECRET_KEY, (err, jwt) => {
+        //   console.log(err)
+        //   res.send({...data._doc, jwt})
+        // })
+    //   })
   }
 
 }
