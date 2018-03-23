@@ -36,10 +36,30 @@ class userController {
       {simNum: req.body.simNum}, 
       {...req.body}, (err, data) => {
         jwt.sign(data._doc, process.env.SECRET_KEY, (err, jwt) => {
-          console.log(err)
           res.send({...data._doc, jwt})
         })
       })
+  }
+
+  static create (req, res) {
+    userModel.create({
+      "simNum": req.body.simNum,
+      "name": req.body.name,
+      "gender": req.body.gender,
+      "address": req.body.address,
+      "pob": req.body.pob,
+      "dob": req.body.dob
+    })
+      .then(data => {
+        jwt.sign(data._doc, process.env.SECRET_KEY, (err,jwt) => {
+          if (err) res.send(err)
+          else res.send({
+            ...data._doc,
+            jwt
+          })
+        })
+      })
+      .catch(err => res.status(500).send(err))
   }
 
   static deleteAll (req,res) {
@@ -49,15 +69,15 @@ class userController {
   }
   
   static vision (req, res) {
-    res.send(req.body)
-    // userModel.findOneOrCreate(
-    //   {simNum: req.body.vision.simNum}, 
-    //   {...req.body.vision}, (err, data) => {
-    //      jwt.sign(data._doc, process.env.SECRET_KEY, (err, jwt) => {
-        //   console.log(err)
-        //   res.send({...data._doc, jwt})
-        // })
-    //   })
+    userModel.findOne({simNum: req.body.vision.simNum})
+      .then(data => {
+        if (data) {
+          res.send({exist: true, ...data})
+        } else {
+          res.send({exist: false, ...req.body.vision})
+        }
+      })
+      .catch(err => console.log(error))
   }
 
 }

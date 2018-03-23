@@ -12,7 +12,7 @@ module.exports = function (req,res,next) {
         req.body.rawvision = result[0].fullTextAnnotation.text.split('\n')
         req.body.vision = {}
         req.body.rawvision.map(each => {
-          console.log(each.slice(0,7))
+          // console.log(each.slice(0,7))
           if (each === 'SURAT IZIN MENGEMUDI') req.body.vision.sim = true;
           else if (each.slice(0,4) === 'Nama') {
             let temp = each.split(' ').filter(char => char !== ':')
