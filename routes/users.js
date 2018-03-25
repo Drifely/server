@@ -8,7 +8,7 @@ const decode = require('../helper/decode')
 
 /* GET users listing. */
 router.get('/', userController.findAll)
-router.post('/', userController.findOneOrCreate)
+// router.post('/', userController.findOneOrCreate)
 router.post('/reg', userController.create)
 router.post('/dummy', userController.postdummy)
 router.delete('/dummy', userController.deleteAll)

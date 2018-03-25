@@ -10,8 +10,8 @@ const users = require('./routes/users');
 
 const app = express();
 
-// mongoose.connect('mongodb://localhost/drifely');
-mongoose.connect('mongodb://drifely:drifely123@ds121589.mlab.com:21589/drifely')
+mongoose.connect('mongodb://localhost/drifely');
+// mongoose.connect('mongodb://drifely:drifely123@ds121589.mlab.com:21589/drifely')
 
 app.use(cors());
 app.use(logger('dev'));

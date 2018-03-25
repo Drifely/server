@@ -31,17 +31,18 @@ class userController {
       .catch(err => console.error)
   }
 
-  static findOneOrCreate (req, res) {
-    userModel.findOneOrCreate(
-      {simNum: req.body.simNum}, 
-      {...req.body}, (err, data) => {
-        jwt.sign(data._doc, process.env.SECRET_KEY, (err, jwt) => {
-          res.send({...data._doc, jwt})
-        })
-      })
-  }
+  // static findOneOrCreate (req, res) {
+  //   userModel.findOneOrCreate(
+  //     {simNum: req.body.simNum}, 
+  //     {...req.body}, (err, data) => {
+  //       jwt.sign(data._doc, process.env.SECRET_KEY, (err, jwt) => {
+  //         res.send({...data._doc, jwt})
+  //       })
+  //     })
+  // }
 
   static create (req, res) {
+    // res.send({msg: 'ANJENG'})
     userModel.create({
       "simNum": req.body.simNum,
       "name": req.body.name,
@@ -51,20 +52,24 @@ class userController {
       "dob": req.body.dob
     })
       .then(data => {
+        // res.send(data)
+        console.log('ini masuk kak', process.env.SECRET_KEY)
         jwt.sign(data._doc, process.env.SECRET_KEY, (err,jwt) => {
+          console.log('ini jwt', jwt)
           if (err) res.send(err)
           else res.send({
+            msg: 'ini masuk jancok',
             ...data._doc,
             jwt
           })
         })
       })
-      .catch(err => res.status(500).send(err))
+      .catch(err => res.send({msg: 'ini masuk error, pler', err}))
   }
 
   static deleteAll (req,res) {
     userModel.remove()
-      .then(data => res.send({msg: 'deleted all dummies'}))
+      .then(data => res.status(200).send({msg: 'deleted all dummies'}))
       .catch(err => res.send({msg: 'somethinggoeswrong'}))
   }
   
