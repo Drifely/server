@@ -9,7 +9,8 @@ var userSchema = mongoose.Schema({
   simType: String,
   gender: String,
   expired: String,
-  contact: String
+  contactHP: String,
+  contactEmail: String
 })
 
 // userSchema.statics.findOneOrCreate = function findOneOrCreate(condition, datauser, callback) {

@@ -14,5 +14,6 @@ router.post('/dummy', userController.postdummy)
 router.delete('/dummy', userController.deleteAll)
 router.post('/simBio', GCShelper.multer.single('image'), GCShelper.sendUploadToGCS, vision, userController.vision)
 router.post('/jwt', decode, userController.print)
+router.get('/emergency', decode, userController.sendSMS)
 
 module.exports = router;
