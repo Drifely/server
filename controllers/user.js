@@ -12,23 +12,26 @@ class userController {
   static findAll (req, res) {
     userModel.find({})
       .then(data => res.send(data))
-      .catch(err => console.error)
+      .catch(err => res.send(err))
   }
 
   static postdummy (req, res) {
-    userModel.create({
-      name: 'Dummy',
-      address : 'String',
-      pob: 'String',
-      dob: 'String',
-      simNum: 'unique',
-      simType: 'String',
-      gender: 'String',
-      expired: 'String',
-      contact: '081332123112'
-    })
-      .then(data => res.send({msg: 'dummy created', dummy:data}))
-      .catch(err => console.error)
+    if (req.body.simNum) {
+      userModel.create({
+        "simNum": req.body.simNum,
+        "name": req.body.name,
+        "gender": req.body.gender,
+        "address": req.body.address,
+        "pob": req.body.pob,
+        "dob": req.body.dob,
+        'expired': 'String',
+        'contact': '081332123112'
+      })
+        .then(data => res.send({msg: 'dummy created', dummy:data}))
+        .catch(err => res.send('error dummy'))
+    } else {
+      res.send({error: true})
+    }
   }
 
   // static findOneOrCreate (req, res) {

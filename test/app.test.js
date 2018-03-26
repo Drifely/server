@@ -2,20 +2,24 @@ const chaiHTTP = require('chai-http')
 const chai = require('chai')
 const expect = chai.expect
 const should = chai.should
+const assert = chai.assert
+const axios = require('axios')
 const app = require('../app')
 const fs = require('fs')
 const decode = require('../helper/decode')
+const vision = require('../helper/vision')
+const GCShelper = require('../helper/multer')
 
 chai.use(chaiHTTP)
 
+// const file  = fs.readFileSync('./test/simyakuza.jpg')
+// console.log('ini file', file)
 describe('user find all end point', function () {
 	it('return array of object data', done => {
 		chai.request(app)
 			.get('/users')
 			.end((err,res)=>{
 				expect(err).null
-				// console.log(err)
-				// console.log(res)
 				expect(res).to.be.an('object')
 				done()
 			})
@@ -61,15 +65,36 @@ describe('error /simBio test', function () {
 
 describe('/dummy post all database',function () {
 	it('create new dummy', function (done) {
+		const objectadd = {
+			simNum: '12345',
+			address: 'jalan haji nawi',
+			name: 'danur',
+			gender: 'male',
+			dop: '02 januari 99',
+			pob: 'jakarta'
+		}
 		chai.request(app)
 			.post('/users/dummy')
+			.send(objectadd)
 			.end((err, resp) => {
 				// console.log(resp.res)
 				expect(JSON.parse(resp.res.text)).to.be.an('object')
 				expect(resp.status).equal(200)
 				done()
 			})
-	} )
+	})
+})
+
+describe('/dummy post all database(error)', function () {
+	it('create new dummy', function (done) {
+		chai.request(app)
+			.post('/users/dummy')
+			.end((err, resp) => {
+				// console.log(resp.data.error)
+				expect(JSON.parse(resp.res.text).error).to.eq(true)
+				done()
+			})
+	})
 })
 
 
@@ -145,5 +170,101 @@ describe('function helper: decode (fail)', function () {
 		expect(decode(req, res, next))
 		// should(decode)
 		done()
+	})
+})
+
+describe('testing get public url multer', function () {
+	it('pass if', function(done) {
+		// console.log(GCShelper.multer.single('image')())
+		const filename = 'test'
+		expect(GCShelper.getPublicUrl(filename)).equal(`https://storage.googleapis.com/${process.env.BUCKET_NAME}/images/${filename}`)
+		done()
+	})
+})
+
+describe('testing sending file to gcs', function () {
+	it('should pass ', function (done) {
+		const req = {
+			file: {
+				originalname: 'haha'
+			},
+			body: {
+				decoded: ''
+			}
+		}
+		const res = {
+			send: (object) => {
+				console.log(object)
+			}
+		}
+		const next = () => {
+			console.log('next')
+		}
+		// console.log(GCShelper.sendUploadToGCS(req, res, next))
+		expect(GCShelper.sendUploadToGCS(req, res, next))
+		done()
+	})
+})
+
+
+describe('testing sending file to gcs', function () {
+	it('should pass ', function (done) {
+		const req = {
+			file: {
+				originalname: 'haha'
+			},
+			body: {
+				decoded: ''
+			}
+		}
+		const res = {
+			send: (object) => {
+				console.log(object)
+			}
+		}
+		const next = () => {
+			console.log('next')
+		}
+		// console.log(GCShelper.sendUploadToGCS(req, res, next))
+		expect(GCShelper.sendUploadToGCS(req, res, next))
+		done()
+	})
+})
+
+
+describe('testing helper: vision', function () {
+	it('give pass pls ', function(done) {
+		const file = fs.readFileSync('./test/simyakuza.jpg')
+		const req = {
+			file : {
+				cloudStorageObject: file
+			}
+		}
+		const res = {}
+		const next = () => {
+			console.log('haha')
+		}
+
+		console.log(vision(req,res,next))
+		done()
+	})
+})
+
+describe('upload endpoint', function () {
+	const fileImg = fs.readFileSync('./test/simyakuza.jpg')
+	console.log('AHAHAAAA', fileImg)
+	it('succes pls', function (done) {
+		this.timeout(10000)
+		chai.request(app)
+		 .post('/users/simbio')
+		 .type('form')
+		//  .field('image',fileImg)
+		 .attach('image', './test/simyakuza.jpg')
+		 .end((err, resp) => {
+			//  console.log('ini resp ============> ', resp)
+			 expect(resp)
+			 done()
+		 })
+		
 	})
 })

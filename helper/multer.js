@@ -14,7 +14,7 @@ const getPublicUrl = (filename) => {
 
 const sendUploadToGCS = (req, res, next) => {
   // console.log(req.body, 'from sendUploadToGCS');
-  
+  console.log('fileee ', req.file)
   //if (!token) do not enter
   if (!req.file) {
     // console.log(req.body.image);
@@ -31,6 +31,8 @@ const sendUploadToGCS = (req, res, next) => {
   })
 
   stream.on('error', (err) => {
+    // console.log('ini kok')
+    err = 'huhu'
     req.file.cloudStorageError = err
     next(err)
   })
@@ -38,10 +40,10 @@ const sendUploadToGCS = (req, res, next) => {
   stream.on('finish', () => {
     req.file.cloudStorageObject = gcsname
     file.makePublic().then(() => {
-        console.log("...............................",req.file);
+        // console.log("...............................",req.file);
       req.file.cloudStoragePublicUrl = getPublicUrl(gcsname)
-      console.log(req.file.cloudStorageObject);
-      console.log(req.file.cloudStorageError);
+      // console.log(req.file.cloudStorageObject);
+      // console.log(req.file.cloudStorageError);
       next()
     })
   })
