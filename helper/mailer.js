@@ -7,7 +7,7 @@ class Mail {
   }
   send () {
     let transporter = nodeMailer.createTransport({
-      service: 'gmail',
+      service: 'Gmail',
       auth: {
         user: 'drifely.emergency@gmail.com',
         pass: 'emergencypassword'
@@ -17,9 +17,14 @@ class Mail {
       from    : 'drifely.emergency@gmail.com',
       to      : this.emailTujuan,
       subject : 'Warning for reckless driving',
+      html: `Hello ${this.username}, This is an email reminding you to drive safely`
     }
-    transporter.sendEmail(mailOption, (err, info) => {
-      if (!err) console.log(info);
+    transporter.sendMail(mailOption, function (err, info) {
+      if (!err) {
+        console.log(info);
+      } else {
+        console.log(err);
+      }
     })
   }  
 }
