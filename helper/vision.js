@@ -9,6 +9,7 @@ module.exports = function (req,res,next) {
   client
    .textDetection(`gs://${process.env.BUCKET_NAME}/images/${req.file.cloudStorageObject}`)
      .then(result => {
+       console.log('ini re', result)
         req.body.rawvision = result[0].fullTextAnnotation.text.split('\n')
         req.body.vision = {}
         req.body.rawvision.map(each => {
@@ -24,7 +25,7 @@ module.exports = function (req,res,next) {
           else if (each.slice(0,9) === 'TglLahir:' || each.slice(0,9) === 'Tgl.Lahir') req.body.vision.dob = each.slice(9).trim()
           else if (each.slice(0,7) === 'Alamat:') req.body.vision.address = each.slice(8)
         })
-        next() 
+        res.send(req.body)
      })
      .catch(err => {
         res.send({msg: 'vision error', err})
