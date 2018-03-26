@@ -1,5 +1,7 @@
 const userModel = require('../model/user')
 const jwt = require('jsonwebtoken')
+const axios = require('axios')
+const Mailer = require('../helper/mailer')
 
 require('dotenv').config()
 
@@ -52,16 +54,18 @@ class userController {
       "gender": req.body.gender,
       "address": req.body.address,
       "pob": req.body.pob,
-      "dob": req.body.dob
+      "dob": req.body.dob,
+      "contactHP"     : req.body.contact,
+      "contactEmail"  : req.body.email
     })
       .then(data => {
         // res.send(data)
+        // console.log(data);
         console.log('ini masuk kak', process.env.SECRET_KEY)
         jwt.sign(data._doc, process.env.SECRET_KEY, (err,jwt) => {
           console.log('ini jwt', jwt)
           if (err) res.send(err)
           else res.send({
-            msg: 'ini masuk jancok',
             ...data._doc,
             jwt
           })
@@ -86,6 +90,22 @@ class userController {
         }
       })
       .catch(err => console.log(error))
+  }
+  
+  static async sendSMS (req, res) {
+    console.log(req.body.decoded);
+    let nexmoPayload = {
+      api_key: '1ba88109',
+      api_secret: '6gxuZl4lPvowscIZ',
+      to: req.body.decoded.contactHP,
+      from: 'drifely',
+      text: `This is a text message sent from ${req.body.decoded.name}'s phone. ${req.body.decoded.name} is driving recklessly, please advise.`
+    };
+    // const response = await axios.post('https://rest.nexmo.com/sms/json', nexmoPayload)
+    let newMail = new Mailer(req.body.decoded.contactEmail, req.body.decoded.name)
+    newMail.send()
+    console.log(newMail);
+    res.status(200).json({sent: true})
   }
 
 }
