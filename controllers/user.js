@@ -103,6 +103,7 @@ class userController {
     };
     const response = await axios.post('https://rest.nexmo.com/sms/json', nexmoPayload)
     let newMail = new Mailer(req.body.decoded.contactEmail, req.body.decoded.name)
+    console.log(newMail);
     res.status(200).json({sent: true})
   }
 
