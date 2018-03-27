@@ -89,6 +89,7 @@ class userController {
             if (err) res.send(err)
             else res.send({
               ...data._doc,
+              exist: true,
               jwt
             })
           })
