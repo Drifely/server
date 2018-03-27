@@ -25,7 +25,8 @@ module.exports = function (req,res,next) {
           else if (each.slice(0,9) === 'TglLahir:' || each.slice(0,9) === 'Tgl.Lahir') req.body.vision.dob = each.slice(9).trim()
           else if (each.slice(0,7) === 'Alamat:') req.body.vision.address = each.slice(8)
         })
-        res.send(req.body)
+        next()
+        // res.send(req.body)
      })
      .catch(err => {
         res.send({msg: 'vision error', err})
