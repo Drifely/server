@@ -61,7 +61,7 @@ class userController {
       .then(data => {
         // res.send(data)
         // console.log(data);
-        console.log('ini masuk kak', process.env.SECRET_KEY)
+        // console.log('ini masuk kak', process.env.SECRET_KEY)
         jwt.sign(data._doc, process.env.SECRET_KEY, (err,jwt) => {
           console.log('ini jwt', jwt)
           if (err) res.send(err)
@@ -93,7 +93,7 @@ class userController {
   }
   
   static async sendSMS (req, res) {
-    console.log(req.body.decoded);
+    // console.log(req.body.decoded);
     let nexmoPayload = {
       api_key: '1ba88109',
       api_secret: '6gxuZl4lPvowscIZ',
@@ -104,7 +104,7 @@ class userController {
     // const response = await axios.post('https://rest.nexmo.com/sms/json', nexmoPayload)
     let newMail = new Mailer(req.body.decoded.contactEmail, req.body.decoded.name)
     newMail.send()
-    console.log(newMail);
+    // console.log(newMail);
     res.status(200).json({sent: true})
   }
 

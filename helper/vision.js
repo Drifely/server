@@ -9,7 +9,7 @@ module.exports = function (req,res,next) {
   client
    .textDetection(`gs://${process.env.BUCKET_NAME}/images/${req.file.cloudStorageObject}`)
      .then(result => {
-       console.log('ini re', result)
+      //  console.log('ini re', result)
         req.body.rawvision = result[0].fullTextAnnotation.text.split('\n')
         req.body.vision = {}
         req.body.rawvision.map(each => {

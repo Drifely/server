@@ -14,7 +14,7 @@ const getPublicUrl = (filename) => {
 
 const sendUploadToGCS = (req, res, next) => {
   // console.log(req.body, 'from sendUploadToGCS');
-  console.log('fileee ', req.file)
+  // console.log('fileee ', req.file)
   //if (!token) do not enter
   if (!req.file) {
     // console.log(req.body.image);

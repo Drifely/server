@@ -9,6 +9,7 @@ const fs = require('fs')
 const decode = require('../helper/decode')
 const vision = require('../helper/vision')
 const GCShelper = require('../helper/multer')
+const mailer = require('../helper/mailer')
 
 chai.use(chaiHTTP)
 
@@ -16,6 +17,7 @@ chai.use(chaiHTTP)
 // console.log('ini file', file)
 describe('user find all end point', function () {
 	it('return array of object data', done => {
+		this.timeout(4000)
 		chai.request(app)
 			.get('/users')
 			.end((err,res)=>{
@@ -244,17 +246,16 @@ describe('testing helper: vision', function () {
 		const next = () => {
 			console.log('haha')
 		}
-
-		console.log(vision(req,res,next))
+		expect(vision(req,res,next))
 		done()
 	})
 })
 
 describe('upload endpoint', function () {
 	const fileImg = fs.readFileSync('./test/simyakuza.jpg')
-	console.log('AHAHAAAA', fileImg)
+	// console.log('AHAHAAAA', fileImg)
 	it('succes pls', function (done) {
-		this.timeout(10000)
+		this.timeout(30000)
 		chai.request(app)
 		 .post('/users/simbio')
 		 .type('form')
@@ -266,5 +267,41 @@ describe('upload endpoint', function () {
 			 done()
 		 })
 		
+	})
+})
+
+
+describe('testing /emergency ', function () {
+	it('return object equal true', function (done) {
+		chai.request(app)
+		 .get('/users/emergency')
+			.set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YWI5Mzc2ZDcxNDM4NDE5ZDg0NTRlOTQiLCJfX3YiOjAsImlhdCI6MTUyMjA4Nzc4OX0.lbMC25nmX-d_zplGbQVBRaI0uUpD0y1Xq_N3NBKYHj0')
+			.end((err,response)=> {
+				expect(response).to.be.an('object')
+				done()
+			})
+	})
+})
+
+describe('testing helper : mailer',function () {
+	it('expect mailer function', function(done) {
+		this.timeout(20000)
+		// console.log(mailer)
+		expect(mailer).to.be.a('Function')
+		done()
+	})
+
+	it('testing the function ',function (done) {
+		this.timeout(30000)
+		let nexmoPayload = {
+			api_key: '1ba88109',
+			api_secret: '6gxuZl4lPvowscIZ',
+			to: '0817182738',
+			from: 'drifely',
+			text: `This is a text message sent from dorman's phone. dorman is driving recklessly, please advise.`
+		};
+		let mail = new mailer('hafizh.abdillahh@gmail.com', 'dorman')
+		expect(mail.send())
+		done()
 	})
 })
