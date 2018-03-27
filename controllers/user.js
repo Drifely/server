@@ -84,7 +84,15 @@ class userController {
     userModel.findOne({simNum: req.body.vision.simNum})
       .then(data => {
         if (data) {
-          res.send({exist: true, ...data})
+          jwt.sign(data._doc, process.env.SECRET_KEY, (err,jwt) => {
+            console.log('ini jwt', jwt)
+            if (err) res.send(err)
+            else res.send({
+              ...data._doc,
+              jwt
+            })
+          })
+          // res.send({exist: true, ...data._doc})asdf
         } else {
           res.send({exist: false, ...req.body.vision})
         }
