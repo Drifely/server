@@ -14,7 +14,7 @@ module.exports = function (req,res,next) {
         req.body.vision = {}
         req.body.rawvision.map(each => {
           // console.log(each.slice(0,7))
-          if (each === 'SURAT IZIN MENGEMUDI') req.body.vision.sim = true;
+          if (each === 'SURAT IZIN MENGEMUDI' || each === 'SURAT IZIN MENGEMUD') req.body.vision.sim = true;
           else if (each.slice(0,4) === 'Nama') {
             let temp = each.split(' ').filter(char => char !== ':')
             req.body.vision.name = temp.slice(1).join(' ')
