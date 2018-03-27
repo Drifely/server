@@ -92,7 +92,7 @@ class userController {
               jwt
             })
           })
-          // res.send({exist: true, ...data._doc})
+          // res.send({exist: true, ...data._doc})asdf
         } else {
           res.send({exist: false, ...req.body.vision})
         }
