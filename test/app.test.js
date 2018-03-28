@@ -244,7 +244,7 @@ describe('testing helper: vision', function () {
 		}
 		const res = {}
 		const next = () => {
-			console.log('haha')
+			console.log('next')
 		}
 		expect(vision(req,res,next))
 		done()
@@ -255,15 +255,16 @@ describe('upload endpoint', function () {
 	const fileImg = fs.readFileSync('./test/simyakuza.jpg')
 	// console.log('AHAHAAAA', fileImg)
 	it('succes pls', function (done) {
-		this.timeout(30000)
+		this.timeout(12000)
 		chai.request(app)
 		 .post('/users/simbio')
 		 .type('form')
 		//  .field('image',fileImg)
 		 .attach('image', './test/simyakuza.jpg')
 		 .end((err, resp) => {
-			//  console.log('ini resp ============> ', resp)
-			 expect(resp)
+			//  console.log('ini resp ============> ', resp.body.vision.sim)
+			 expect(resp.body.vision.sim).to.eql(true)
+			 expect(resp.body.vision).to.be.an('object')
 			 done()
 		 })
 		
@@ -285,14 +286,14 @@ describe('testing /emergency ', function () {
 
 describe('testing helper : mailer',function () {
 	it('expect mailer function', function(done) {
-		this.timeout(20000)
+		this.timeout(10000)
 		// console.log(mailer)
 		expect(mailer).to.be.a('Function')
 		done()
 	})
 
 	it('testing the function ',function (done) {
-		this.timeout(30000)
+		this.timeout(5000)
 		let nexmoPayload = {
 			api_key: '1ba88109',
 			api_secret: '6gxuZl4lPvowscIZ',

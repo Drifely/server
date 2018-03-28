@@ -28,6 +28,7 @@ module.exports = function (req,res,next) {
         res.send(req.body)
      })
      .catch(err => {
-        res.send({msg: 'vision error', err})
+      //  console.log('ini masuk ke sini')
+        next({msg: 'vision error', err})
      })
 }
